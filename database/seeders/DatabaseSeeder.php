@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             CatalogoSeeder::class,
+            EquipoSeeder::class,
         ]);
 
         $admin->syncRoles([RolUsuario::Administrador->value]);

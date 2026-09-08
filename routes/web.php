@@ -5,6 +5,7 @@ use App\Http\Controllers\Catalogos\ResponsableController;
 use App\Http\Controllers\Catalogos\TipoEquipoController;
 use App\Http\Controllers\Catalogos\UbicacionController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Equipos\EquipoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Usuarios\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,11 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->except(['show']);
     Route::patch('usuarios/{usuario}/reactivar', [UsuarioController::class, 'reactivar'])
         ->name('usuarios.reactivar');
+
+    // Equipos
+    Route::resource('equipos', EquipoController::class);
+    Route::patch('equipos/{equipo}/reactivar', [EquipoController::class, 'reactivar'])
+        ->name('equipos.reactivar');
 
     // Catálogos
     Route::prefix('catalogos')->name('catalogos.')->group(function () {

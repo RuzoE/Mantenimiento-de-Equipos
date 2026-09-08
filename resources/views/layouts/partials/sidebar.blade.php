@@ -29,8 +29,12 @@
 
         <div class="space-y-1">
             <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">Gestión</p>
+            @can('equipos.ver')
+                <x-ui.nav-link :href="route('equipos.index')" :active="request()->routeIs('equipos.*')" icon="desktop">
+                    Equipos
+                </x-ui.nav-link>
+            @endcan
             {{-- Estos módulos se habilitan en fases posteriores --}}
-            <x-ui.nav-link icon="desktop" disabled>Equipos</x-ui.nav-link>
             <x-ui.nav-link icon="wrench" disabled>Mantenimientos</x-ui.nav-link>
             <x-ui.nav-link icon="calendar" disabled>Programación</x-ui.nav-link>
         </div>
