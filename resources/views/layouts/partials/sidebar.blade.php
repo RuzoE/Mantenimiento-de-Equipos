@@ -1,0 +1,60 @@
+<aside
+    class="fixed inset-y-0 left-0 z-40 flex w-64 transform flex-col border-r border-gray-200 bg-white transition-transform duration-200 ease-in-out lg:translate-x-0"
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+
+    {{-- Encabezado --}}
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-gray-200 px-5">
+        <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-600">
+            <x-application-logo class="h-5 w-5 fill-current text-white" />
+        </span>
+        <span class="text-sm font-semibold leading-tight text-gray-900">
+            Mantenimiento<br><span class="font-normal text-gray-500">de Equipos</span>
+        </span>
+        <button type="button" @click="sidebarOpen = false"
+                class="ml-auto rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 lg:hidden">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    {{-- Navegación --}}
+    <nav class="flex-1 space-y-6 overflow-y-auto px-3 py-4">
+        <div class="space-y-1">
+            <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">General</p>
+            <x-ui.nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="home">
+                Panel principal
+            </x-ui.nav-link>
+        </div>
+
+        <div class="space-y-1">
+            <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">Gestión</p>
+            {{-- Estos módulos se habilitan en fases posteriores --}}
+            <x-ui.nav-link icon="desktop" disabled>Equipos</x-ui.nav-link>
+            <x-ui.nav-link icon="wrench" disabled>Mantenimientos</x-ui.nav-link>
+            <x-ui.nav-link icon="calendar" disabled>Programación</x-ui.nav-link>
+            <x-ui.nav-link icon="map-pin" disabled>Ubicaciones</x-ui.nav-link>
+        </div>
+
+        <div class="space-y-1">
+            <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">Administración</p>
+            <x-ui.nav-link icon="users" disabled>Usuarios</x-ui.nav-link>
+            <x-ui.nav-link icon="chart-bar" disabled>Reportes</x-ui.nav-link>
+            <x-ui.nav-link icon="clipboard" disabled>Auditoría</x-ui.nav-link>
+        </div>
+    </nav>
+
+    {{-- Pie de la barra lateral --}}
+    <div class="shrink-0 border-t border-gray-200 p-4">
+        <a href="{{ route('profile.edit') }}"
+           class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700">
+                {{ \Illuminate\Support\Str::of(auth()->user()->name)->explode(' ')->take(2)->map(fn ($p) => \Illuminate\Support\Str::substr($p, 0, 1))->implode('') }}
+            </span>
+            <span class="min-w-0">
+                <span class="block truncate font-medium text-gray-900">{{ auth()->user()->name }}</span>
+                <span class="block truncate text-xs text-gray-500">{{ auth()->user()->email }}</span>
+            </span>
+        </a>
+    </div>
+</aside>
