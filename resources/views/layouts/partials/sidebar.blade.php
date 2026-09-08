@@ -33,8 +33,25 @@
             <x-ui.nav-link icon="desktop" disabled>Equipos</x-ui.nav-link>
             <x-ui.nav-link icon="wrench" disabled>Mantenimientos</x-ui.nav-link>
             <x-ui.nav-link icon="calendar" disabled>Programación</x-ui.nav-link>
-            <x-ui.nav-link icon="map-pin" disabled>Ubicaciones</x-ui.nav-link>
         </div>
+
+        @can('catalogos.ver')
+            <div class="space-y-1">
+                <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">Catálogos</p>
+                <x-ui.nav-link :href="route('catalogos.tipos-equipo.index')" :active="request()->routeIs('catalogos.tipos-equipo.*')" icon="desktop">
+                    Tipos de equipo
+                </x-ui.nav-link>
+                <x-ui.nav-link :href="route('catalogos.marcas.index')" :active="request()->routeIs('catalogos.marcas.*')" icon="clipboard">
+                    Marcas
+                </x-ui.nav-link>
+                <x-ui.nav-link :href="route('catalogos.ubicaciones.index')" :active="request()->routeIs('catalogos.ubicaciones.*')" icon="map-pin">
+                    Ubicaciones
+                </x-ui.nav-link>
+                <x-ui.nav-link :href="route('catalogos.responsables.index')" :active="request()->routeIs('catalogos.responsables.*')" icon="users">
+                    Responsables
+                </x-ui.nav-link>
+            </div>
+        @endcan
 
         @canany(['usuarios.ver', 'reportes.ver', 'auditoria.ver'])
             <div class="space-y-1">

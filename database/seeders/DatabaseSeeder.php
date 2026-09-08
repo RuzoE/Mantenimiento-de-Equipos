@@ -23,7 +23,10 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
-        $this->call(RolePermissionSeeder::class);
+        $this->call([
+            RolePermissionSeeder::class,
+            CatalogoSeeder::class,
+        ]);
 
         $admin->syncRoles([RolUsuario::Administrador->value]);
     }
