@@ -36,12 +36,18 @@
             <x-ui.nav-link icon="map-pin" disabled>Ubicaciones</x-ui.nav-link>
         </div>
 
-        <div class="space-y-1">
-            <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">Administración</p>
-            <x-ui.nav-link icon="users" disabled>Usuarios</x-ui.nav-link>
-            <x-ui.nav-link icon="chart-bar" disabled>Reportes</x-ui.nav-link>
-            <x-ui.nav-link icon="clipboard" disabled>Auditoría</x-ui.nav-link>
-        </div>
+        @canany(['usuarios.ver', 'reportes.ver', 'auditoria.ver'])
+            <div class="space-y-1">
+                <p class="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">Administración</p>
+                @can('usuarios.ver')
+                    <x-ui.nav-link :href="route('usuarios.index')" :active="request()->routeIs('usuarios.*')" icon="users">
+                        Usuarios
+                    </x-ui.nav-link>
+                @endcan
+                <x-ui.nav-link icon="chart-bar" disabled>Reportes</x-ui.nav-link>
+                <x-ui.nav-link icon="clipboard" disabled>Auditoría</x-ui.nav-link>
+            </div>
+        @endcanany
     </nav>
 
     {{-- Pie de la barra lateral --}}

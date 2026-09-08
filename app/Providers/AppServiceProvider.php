@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // El acceso total del rol Administrador se concede asignándole el
+        // conjunto completo de permisos en RolePermissionSeeder, no con un
+        // Gate::before global: así las policies (p. ej. no desactivarse a sí
+        // mismo, no eliminar al último Administrador) también se aplican a él.
     }
 }

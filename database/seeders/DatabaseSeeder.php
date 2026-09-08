@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RolUsuario;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -13,12 +14,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::updateOrCreate(
+        $admin = User::updateOrCreate(
             ['email' => 'admin@policarpa.edu.co'],
             [
                 'name' => 'Administrador',
                 'password' => Hash::make('password'),
+                'activo' => true,
             ],
         );
+
+        $this->call(RolePermissionSeeder::class);
+
+        $admin->syncRoles([RolUsuario::Administrador->value]);
     }
 }
