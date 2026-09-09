@@ -77,7 +77,11 @@
                         Usuarios
                     </x-ui.nav-link>
                 @endcan
-                <x-ui.nav-link icon="chart-bar" disabled>Reportes</x-ui.nav-link>
+                @can('reportes.ver')
+                    <x-ui.nav-link :href="route('reportes.index')" :active="request()->routeIs('reportes.*')" icon="chart-bar">
+                        Reportes
+                    </x-ui.nav-link>
+                @endcan
                 <x-ui.nav-link icon="clipboard" disabled>Auditoría</x-ui.nav-link>
             </div>
         @endcanany

@@ -10,6 +10,7 @@ use App\Http\Controllers\Mantenimientos\EvidenciaController;
 use App\Http\Controllers\Mantenimientos\MantenimientoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Programaciones\ProgramacionController;
+use App\Http\Controllers\Reportes\ReporteController;
 use App\Http\Controllers\Traslados\TrasladoController;
 use App\Http\Controllers\Usuarios\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,15 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->name('equipos.traslados.store');
     Route::get('traslados', [TrasladoController::class, 'index'])->name('traslados.index');
     Route::delete('traslados/{traslado}', [TrasladoController::class, 'destroy'])->name('traslados.destroy');
+
+    // Reportes
+    Route::middleware('can:reportes.ver')->prefix('reportes')->name('reportes.')->group(function () {
+        Route::get('/', [ReporteController::class, 'index'])->name('index');
+        Route::get('equipos/export', [ReporteController::class, 'equiposExport'])->name('equipos.export');
+        Route::get('equipos', [ReporteController::class, 'equipos'])->name('equipos');
+        Route::get('mantenimientos/export', [ReporteController::class, 'mantenimientosExport'])->name('mantenimientos.export');
+        Route::get('mantenimientos', [ReporteController::class, 'mantenimientos'])->name('mantenimientos');
+    });
 
     // Catálogos
     Route::prefix('catalogos')->name('catalogos.')->group(function () {
