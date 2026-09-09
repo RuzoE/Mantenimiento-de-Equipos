@@ -54,6 +54,50 @@ enum EstadoEquipo: string
     }
 
     /**
+     * Grupos de estados usados en el dashboard. Son mutuamente excluyentes
+     * y cubren los 7 estados.
+     *
+     * @return array<int, self>
+     */
+    public static function grupoOperativo(): array
+    {
+        return [self::Operativo];
+    }
+
+    /**
+     * @return array<int, self>
+     */
+    public static function grupoConNovedad(): array
+    {
+        return [self::Regular, self::Danado];
+    }
+
+    /**
+     * @return array<int, self>
+     */
+    public static function grupoEnMantenimiento(): array
+    {
+        return [self::EnMantenimiento, self::EnReparacion];
+    }
+
+    /**
+     * @return array<int, self>
+     */
+    public static function grupoFueraDeServicio(): array
+    {
+        return [self::FueraDeServicio, self::DadoDeBaja];
+    }
+
+    /**
+     * @param  array<int, self>  $grupo
+     * @return array<int, string>
+     */
+    public static function valoresDe(array $grupo): array
+    {
+        return array_map(fn (self $e) => $e->value, $grupo);
+    }
+
+    /**
      * @return array<int, string>
      */
     public static function values(): array
