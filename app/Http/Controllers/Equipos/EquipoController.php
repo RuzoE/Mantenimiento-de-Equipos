@@ -64,7 +64,13 @@ class EquipoController extends Controller
     {
         $this->authorize('view', $equipo);
 
-        $equipo->load(['tipoEquipo', 'marca', 'ubicacion', 'responsable']);
+        $equipo->load([
+            'tipoEquipo',
+            'marca',
+            'ubicacion',
+            'responsable',
+            'mantenimientos' => fn ($q) => $q->recientes()->with('responsable'),
+        ]);
 
         return view('equipos.show', ['equipo' => $equipo]);
     }

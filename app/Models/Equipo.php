@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Equipo extends Model
 {
@@ -62,6 +63,11 @@ class Equipo extends Model
     public function responsable(): BelongsTo
     {
         return $this->belongsTo(Responsable::class);
+    }
+
+    public function mantenimientos(): HasMany
+    {
+        return $this->hasMany(Mantenimiento::class);
     }
 
     public function scopeActivos(Builder $query): void

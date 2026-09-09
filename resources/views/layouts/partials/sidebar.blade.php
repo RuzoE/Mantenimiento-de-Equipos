@@ -34,8 +34,12 @@
                     Equipos
                 </x-ui.nav-link>
             @endcan
-            {{-- Estos módulos se habilitan en fases posteriores --}}
-            <x-ui.nav-link icon="wrench" disabled>Mantenimientos</x-ui.nav-link>
+            @can('mantenimientos.ver')
+                <x-ui.nav-link :href="route('mantenimientos.index')" :active="request()->routeIs('mantenimientos.*')" icon="wrench">
+                    Mantenimientos
+                </x-ui.nav-link>
+            @endcan
+            {{-- Este módulo se habilita en una fase posterior --}}
             <x-ui.nav-link icon="calendar" disabled>Programación</x-ui.nav-link>
         </div>
 
