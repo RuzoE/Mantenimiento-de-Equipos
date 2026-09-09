@@ -10,6 +10,7 @@ use App\Http\Controllers\Mantenimientos\EvidenciaController;
 use App\Http\Controllers\Mantenimientos\MantenimientoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Programaciones\ProgramacionController;
+use App\Http\Controllers\Traslados\TrasladoController;
 use App\Http\Controllers\Usuarios\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,14 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::patch('programaciones/{programacion}/realizar', [ProgramacionController::class, 'realizar'])->name('programaciones.realizar');
     Route::patch('programaciones/{programacion}/cancelar', [ProgramacionController::class, 'cancelar'])->name('programaciones.cancelar');
     Route::patch('programaciones/{programacion}/reactivar', [ProgramacionController::class, 'reactivar'])->name('programaciones.reactivar');
+
+    // Traslados
+    Route::get('equipos/{equipo}/traslados/create', [TrasladoController::class, 'create'])
+        ->name('equipos.traslados.create');
+    Route::post('equipos/{equipo}/traslados', [TrasladoController::class, 'store'])
+        ->name('equipos.traslados.store');
+    Route::get('traslados', [TrasladoController::class, 'index'])->name('traslados.index');
+    Route::delete('traslados/{traslado}', [TrasladoController::class, 'destroy'])->name('traslados.destroy');
 
     // Catálogos
     Route::prefix('catalogos')->name('catalogos.')->group(function () {

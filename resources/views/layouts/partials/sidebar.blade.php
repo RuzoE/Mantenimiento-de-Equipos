@@ -44,6 +44,11 @@
                     Programación
                 </x-ui.nav-link>
             @endcan
+            @can('traslados.ver')
+                <x-ui.nav-link :href="route('traslados.index')" :active="request()->routeIs('traslados.*')" icon="map-pin">
+                    Traslados
+                </x-ui.nav-link>
+            @endcan
         </div>
 
         @can('catalogos.ver')

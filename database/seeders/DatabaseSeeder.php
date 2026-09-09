@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             EquipoSeeder::class,
             MantenimientoSeeder::class,
             ProgramacionSeeder::class,
+            TrasladoSeeder::class,
         ]);
 
         $admin->syncRoles([RolUsuario::Administrador->value]);

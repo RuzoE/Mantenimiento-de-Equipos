@@ -44,9 +44,14 @@
     {{-- Historial --}}
     <x-ui.card class="lg:col-span-2">
         <x-slot name="actions">
-            @can('create', \App\Models\Mantenimiento::class)
-                <x-ui.button :href="route('equipos.mantenimientos.create', $equipo)" size="sm">Registrar mantenimiento</x-ui.button>
-            @endcan
+            <div class="flex flex-wrap gap-2">
+                @can('create', \App\Models\Mantenimiento::class)
+                    <x-ui.button :href="route('equipos.mantenimientos.create', $equipo)" size="sm">Registrar mantenimiento</x-ui.button>
+                @endcan
+                @can('create', \App\Models\Traslado::class)
+                    <x-ui.button :href="route('equipos.traslados.create', $equipo)" size="sm" variant="secondary">Registrar traslado</x-ui.button>
+                @endcan
+            </div>
         </x-slot>
         <x-slot name="title">Historial</x-slot>
 
@@ -81,8 +86,37 @@
 
             <section>
                 <h4 class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Traslados</h4>
-                <x-ui.empty-state icon="map-pin" title="Sin traslados registrados"
-                    message="El historial de cambios de ubicación se habilita en la FASE 8." />
+                @php $traslados = $equipo->traslados->sortByDesc('fecha')->sortByDesc('id')->values(); @endphp
+                @if ($traslados->isEmpty())
+                    <x-ui.empty-state icon="map-pin" title="Sin traslados registrados"
+                        message="Este equipo no ha cambiado de ubicación." />
+                @else
+                    <ul class="divide-y divide-gray-100 text-sm">
+                        @foreach ($traslados as $traslado)
+                            <li class="flex items-start justify-between gap-3 py-2">
+                                <div class="min-w-0">
+                                    <span class="font-medium text-gray-900">{{ $traslado->fecha->format('d/m/Y') }}</span>
+                                    <span class="text-gray-500">
+                                        · {{ $traslado->ubicacionOrigen->nombre }}
+                                        <span class="text-gray-400">&rarr;</span>
+                                        {{ $traslado->ubicacionDestino->nombre }}
+                                    </span>
+                                    <p class="text-xs text-gray-500">
+                                        {{ $traslado->motivo->label() }}@if ($traslado->observaciones) · {{ $traslado->observaciones }}@endif
+                                    </p>
+                                </div>
+                                @can('delete', $traslado)
+                                    <form method="POST" action="{{ route('traslados.destroy', $traslado) }}"
+                                          onsubmit="return confirm('¿Deshacer este traslado? El equipo volverá a {{ $traslado->ubicacionOrigen->nombre }}.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="shrink-0 text-xs text-red-600 hover:underline">Deshacer</button>
+                                    </form>
+                                @endcan
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </section>
 
             <section>

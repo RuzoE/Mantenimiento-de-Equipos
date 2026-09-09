@@ -25,11 +25,15 @@
             <x-ui.empty-state title="Sin registros" message="No hay elementos que coincidan con el filtro." />
         </x-ui.card>
     @else
+        @php $tieneConteoEquipos = isset($items->first()->equipos_count); @endphp
         <x-ui.table>
             <x-slot name="head">
                 @foreach ($campos as $campo)
                     <th class="px-4 py-3">{{ $campo['label'] }}</th>
                 @endforeach
+                @if ($tieneConteoEquipos)
+                    <th class="px-4 py-3">Equipos</th>
+                @endif
                 <th class="px-4 py-3">Estado</th>
                 <th class="px-4 py-3 text-right">Acciones</th>
             </x-slot>
@@ -41,6 +45,16 @@
                             {{ $item->{$campo['name']} ?: '—' }}
                         </td>
                     @endforeach
+                    @if ($tieneConteoEquipos)
+                        <td class="px-4 py-3">
+                            @if ($item->equipos_count > 0)
+                                <a href="{{ route('equipos.index', ['ubicacion_id' => $item->id]) }}"
+                                   class="text-brand-700 hover:underline">{{ $item->equipos_count }} equipo(s)</a>
+                            @else
+                                <span class="text-gray-400">0</span>
+                            @endif
+                        </td>
+                    @endif
                     <td class="px-4 py-3">
                         <x-ui.badge :color="$item->activo ? 'green' : 'gray'">
                             {{ $item->activo ? 'Activo' : 'Inactivo' }}

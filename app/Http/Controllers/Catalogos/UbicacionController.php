@@ -23,6 +23,11 @@ class UbicacionController extends CatalogoController
         return ['nombre', 'descripcion'];
     }
 
+    protected function conteos(): array
+    {
+        return ['equipos'];
+    }
+
     protected function campos(): array
     {
         return [

@@ -57,9 +57,19 @@ abstract class CatalogoController extends Controller
         return ['nombre'];
     }
 
+    /**
+     * Relaciones cuyo conteo se añade a cada fila del listado (withCount).
+     *
+     * @return array<int, string>
+     */
+    protected function conteos(): array
+    {
+        return [];
+    }
+
     protected function query(): Builder
     {
-        return $this->modelClass::query();
+        return $this->modelClass::query()->withCount($this->conteos());
     }
 
     protected function resolver(int|string $id): Model
