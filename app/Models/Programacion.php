@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\EstadoProgramacion;
 use App\Enums\FrecuenciaMantenimiento;
 use App\Enums\TipoMantenimiento;
+use App\Models\Concerns\Auditable;
 use Carbon\CarbonInterface;
 use Database\Factories\ProgramacionFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +16,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Programacion extends Model
 {
     /** @use HasFactory<ProgramacionFactory> */
-    use HasFactory;
+    use Auditable, HasFactory;
+
+    public function auditModulo(): string
+    {
+        return 'Programación';
+    }
+
+    public function auditEtiqueta(): string
+    {
+        return "la programación de {$this->equipo->codigo_interno}";
+    }
 
     protected $table = 'programaciones_mantenimiento';
 

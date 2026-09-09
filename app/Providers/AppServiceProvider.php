@@ -2,12 +2,20 @@
 
 namespace App\Providers;
 
+use App\Models\Equipo;
+use App\Models\Mantenimiento;
 use App\Models\Marca;
+use App\Models\Programacion;
 use App\Models\Responsable;
 use App\Models\TipoEquipo;
+use App\Models\Traslado;
 use App\Models\Ubicacion;
+use App\Models\User;
+use App\Observers\AuditObserver;
 use App\Policies\CatalogoPolicy;
+use App\Services\Alertas\CentroDeAlertas;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,5 +42,17 @@ class AppServiceProvider extends ServiceProvider
         foreach ([TipoEquipo::class, Marca::class, Ubicacion::class, Responsable::class] as $modelo) {
             Gate::policy($modelo, CatalogoPolicy::class);
         }
+
+        // Auditoría automática de los modelos que usan el trait Auditable.
+        foreach ([Equipo::class, Mantenimiento::class, Traslado::class, Programacion::class, User::class] as $modelo) {
+            $modelo::observe(AuditObserver::class);
+        }
+
+        // Contadores de alertas para la campana del navbar.
+        View::composer('layouts.partials.navbar', function ($view) {
+            $view->with('alertas', auth()->check()
+                ? app(CentroDeAlertas::class)->contadores()
+                : ['total' => 0, 'vencidas' => 0, 'proximas' => 0, 'con_novedad' => 0]);
+        });
     }
 }

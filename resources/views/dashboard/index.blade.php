@@ -124,7 +124,7 @@
                                 <x-ui.icon :name="$evento->icono" class="h-4 w-4" />
                             </span>
                             <div class="min-w-0">
-                                <a href="{{ $evento->url }}" class="text-gray-800 hover:underline">{{ $evento->texto }}</a>
+                                <p class="text-gray-800">{{ ucfirst($evento->texto) }}</p>
                                 <p class="text-xs text-gray-400">{{ $evento->fecha?->diffForHumans() }}</p>
                             </div>
                         </li>

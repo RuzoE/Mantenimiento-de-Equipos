@@ -10,6 +10,9 @@
 
     <div class="flex-1"></div>
 
+    {{-- Campana de alertas --}}
+    @include('layouts.partials.campana')
+
     {{-- Menú de usuario --}}
     <x-dropdown align="right" width="48">
         <x-slot name="trigger">

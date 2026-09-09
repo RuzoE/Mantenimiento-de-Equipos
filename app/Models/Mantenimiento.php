@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\EstadoEquipo;
 use App\Enums\TipoMantenimiento;
+use App\Models\Concerns\Auditable;
 use Database\Factories\MantenimientoFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Mantenimiento extends Model
 {
     /** @use HasFactory<MantenimientoFactory> */
-    use HasFactory;
+    use Auditable, HasFactory;
+
+    public function auditModulo(): string
+    {
+        return 'Mantenimientos';
+    }
+
+    public function auditEtiqueta(): string
+    {
+        return "un mantenimiento {$this->tipo->label()} en {$this->equipo->codigo_interno}";
+    }
 
     protected $table = 'mantenimientos';
 

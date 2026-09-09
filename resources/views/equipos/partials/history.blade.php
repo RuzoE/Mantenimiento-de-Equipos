@@ -121,8 +121,34 @@
 
             <section>
                 <h4 class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Cambios y novedades</h4>
-                <x-ui.empty-state icon="clipboard" title="Sin cambios registrados"
-                    message="La auditoría de cambios sobre el equipo se habilita en la FASE 11." />
+                @if ($equipo->auditorias->isEmpty())
+                    <x-ui.empty-state icon="clipboard" title="Sin cambios registrados"
+                        message="No se han registrado cambios sobre este equipo." />
+                @else
+                    <ul class="divide-y divide-gray-100 text-sm">
+                        @foreach ($equipo->auditorias as $auditoria)
+                            <li class="py-2">
+                                <p class="text-gray-800">
+                                    <span class="font-medium">{{ $auditoria->actor() }}</span>
+                                    {{ $auditoria->descripcion }}
+                                </p>
+                                <p class="text-xs text-gray-400">{{ $auditoria->created_at->diffForHumans() }}</p>
+                                @if (! empty($auditoria->cambios))
+                                    <ul class="mt-1 space-y-0.5 text-xs text-gray-500">
+                                        @foreach ($auditoria->cambios as $campo => $valor)
+                                            <li>
+                                                <span class="font-medium">{{ $campo }}:</span>
+                                                <span class="line-through">{{ $valor['antes'] ?? '—' }}</span>
+                                                <span class="text-gray-400">&rarr;</span>
+                                                {{ $valor['despues'] ?? '—' }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </section>
         </div>
     </x-ui.card>

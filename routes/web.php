@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Alertas\AlertaController;
+use App\Http\Controllers\Auditoria\AuditoriaController;
 use App\Http\Controllers\Catalogos\MarcaController;
 use App\Http\Controllers\Catalogos\ResponsableController;
 use App\Http\Controllers\Catalogos\TipoEquipoController;
@@ -65,6 +67,11 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->name('equipos.traslados.store');
     Route::get('traslados', [TrasladoController::class, 'index'])->name('traslados.index');
     Route::delete('traslados/{traslado}', [TrasladoController::class, 'destroy'])->name('traslados.destroy');
+
+    // Alertas y auditoría
+    Route::get('alertas', [AlertaController::class, 'index'])->name('alertas.index');
+    Route::get('auditoria', [AuditoriaController::class, 'index'])
+        ->middleware('can:auditoria.ver')->name('auditoria.index');
 
     // Reportes
     Route::middleware('can:reportes.ver')->prefix('reportes')->name('reportes.')->group(function () {

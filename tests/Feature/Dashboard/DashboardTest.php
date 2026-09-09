@@ -7,7 +7,6 @@ use App\Enums\RolUsuario;
 use App\Models\Equipo;
 use App\Models\Mantenimiento;
 use App\Models\Programacion;
-use App\Models\Traslado;
 use App\Models\User;
 use App\Services\Dashboard\ResumenDashboard;
 use Database\Seeders\RolePermissionSeeder;
@@ -100,12 +99,15 @@ class DashboardTest extends TestCase
         $this->assertFalse($novedades->contains('id', $ok->id));
     }
 
-    public function test_recent_activity_merges_mantenimientos_and_traslados(): void
+    public function test_recent_activity_comes_from_the_audit_log(): void
     {
         Mantenimiento::factory()->create();
-        Traslado::factory()->create();
 
-        $this->assertCount(2, $this->resumen()['actividadReciente']);
+        $actividad = $this->resumen()['actividadReciente'];
+
+        $this->assertNotEmpty($actividad);
+        $this->assertLessThanOrEqual(8, $actividad->count());
+        $this->assertTrue($actividad->contains(fn ($evento) => str_contains($evento->texto, 'mantenimiento')));
     }
 
     public function test_por_estado_percentages_add_up(): void

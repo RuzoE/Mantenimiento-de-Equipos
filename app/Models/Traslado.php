@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MotivoTraslado;
+use App\Models\Concerns\Auditable;
 use Database\Factories\TrasladoFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Traslado extends Model
 {
     /** @use HasFactory<TrasladoFactory> */
-    use HasFactory;
+    use Auditable, HasFactory;
+
+    public function auditModulo(): string
+    {
+        return 'Traslados';
+    }
+
+    public function auditEtiqueta(): string
+    {
+        return "un traslado del equipo {$this->equipo->codigo_interno}";
+    }
 
     protected $fillable = [
         'equipo_id',

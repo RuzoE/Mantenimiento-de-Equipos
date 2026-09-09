@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\RolUsuario;
+use App\Models\Concerns\Auditable;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -18,7 +19,25 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use Auditable, HasFactory, HasRoles, Notifiable;
+
+    public function auditModulo(): string
+    {
+        return 'Usuarios';
+    }
+
+    public function auditEtiqueta(): string
+    {
+        return "el usuario {$this->name}";
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function auditExcept(): array
+    {
+        return ['email_verified_at'];
+    }
 
     /**
      * Get the attributes that should be cast.

@@ -27,7 +27,7 @@ class EquipoFactory extends Factory
             'numero_serie' => fake()->boolean(70) ? fake()->unique()->bothify('SN########') : null,
             'ubicacion_id' => Ubicacion::factory(),
             'responsable_id' => fake()->boolean(70) ? Responsable::factory() : null,
-            'estado' => fake()->randomElement(EstadoEquipo::cases()),
+            'estado' => EstadoEquipo::Operativo,
             'fecha_adquisicion' => fake()->optional()->dateTimeBetween('-5 years', '-1 month'),
             'fecha_garantia' => fake()->optional()->dateTimeBetween('now', '+3 years'),
             'procesador' => fake()->optional()->word(),

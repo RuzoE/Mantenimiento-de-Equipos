@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\EstadoEquipo;
+use App\Models\Concerns\Auditable;
 use Carbon\CarbonInterface;
 use Database\Factories\EquipoFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Equipo extends Model
 {
     /** @use HasFactory<EquipoFactory> */
-    use HasFactory;
+    use Auditable, HasFactory;
+
+    public function auditModulo(): string
+    {
+        return 'Equipos';
+    }
+
+    public function auditEtiqueta(): string
+    {
+        return "el equipo {$this->codigo_interno}";
+    }
 
     protected $fillable = [
         'codigo_interno',

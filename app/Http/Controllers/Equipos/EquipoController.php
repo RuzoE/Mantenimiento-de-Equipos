@@ -72,6 +72,7 @@ class EquipoController extends Controller
             'mantenimientos' => fn ($q) => $q->recientes()->with('responsable'),
             'programaciones',
             'traslados' => fn ($q) => $q->recientes()->with(['ubicacionOrigen', 'ubicacionDestino']),
+            'auditorias' => fn ($q) => $q->recientes()->with('user')->limit(15),
         ]);
 
         return view('equipos.show', ['equipo' => $equipo]);

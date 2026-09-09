@@ -4,10 +4,9 @@ namespace App\Services\Dashboard;
 
 use App\Enums\EstadoEquipo;
 use App\Enums\EstadoProgramacion;
+use App\Models\Auditoria;
 use App\Models\Equipo;
-use App\Models\Mantenimiento;
 use App\Models\Programacion;
-use App\Models\Traslado;
 use App\Models\Ubicacion;
 use Illuminate\Support\Collection;
 
@@ -94,28 +93,24 @@ class ResumenDashboard
     }
 
     /**
-     * Últimos mantenimientos y traslados, mezclados por fecha.
+     * Actividad reciente a partir de la auditoría.
      *
      * @return Collection<int, object>
      */
     private function actividadReciente(): Collection
     {
-        $mantenimientos = Mantenimiento::with('equipo')->latest()->limit(6)->get()
-            ->map(fn (Mantenimiento $m) => (object) [
-                'fecha' => $m->created_at,
-                'icono' => 'wrench',
-                'texto' => "Mantenimiento {$m->tipo->label()} · {$m->equipo->codigo_interno}",
-                'url' => route('mantenimientos.show', $m),
+        return Auditoria::with('user')->recientes()->limit(8)->get()
+            ->map(fn (Auditoria $a) => (object) [
+                'fecha' => $a->created_at,
+                'icono' => match ($a->modulo) {
+                    'Mantenimientos' => 'wrench',
+                    'Traslados' => 'map-pin',
+                    'Programación' => 'calendar',
+                    'Usuarios' => 'users',
+                    'Equipos' => 'desktop',
+                    default => 'clipboard',
+                },
+                'texto' => $a->actor().' '.$a->descripcion,
             ]);
-
-        $traslados = Traslado::with(['equipo', 'ubicacionDestino'])->latest()->limit(6)->get()
-            ->map(fn (Traslado $t) => (object) [
-                'fecha' => $t->created_at,
-                'icono' => 'map-pin',
-                'texto' => "Traslado de {$t->equipo->codigo_interno} a {$t->ubicacionDestino->nombre}",
-                'url' => route('equipos.show', $t->equipo),
-            ]);
-
-        return $mantenimientos->merge($traslados)->sortByDesc('fecha')->take(8)->values();
     }
 }

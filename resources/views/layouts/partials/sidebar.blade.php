@@ -82,7 +82,11 @@
                         Reportes
                     </x-ui.nav-link>
                 @endcan
-                <x-ui.nav-link icon="clipboard" disabled>Auditoría</x-ui.nav-link>
+                @can('auditoria.ver')
+                    <x-ui.nav-link :href="route('auditoria.index')" :active="request()->routeIs('auditoria.*')" icon="clipboard">
+                        Auditoría
+                    </x-ui.nav-link>
+                @endcan
             </div>
         @endcanany
     </nav>
