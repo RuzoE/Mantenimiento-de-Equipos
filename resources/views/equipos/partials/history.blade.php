@@ -1,13 +1,44 @@
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    {{-- Próximo mantenimiento (se conecta en la FASE 7) --}}
+    {{-- Próximo mantenimiento --}}
+    @php
+        $proxima = $equipo->programaciones
+            ->reject(fn ($prog) => $prog->estado === \App\Enums\EstadoProgramacion::Cancelado)
+            ->sortBy('proxima_fecha')
+            ->first();
+    @endphp
     <x-ui.card title="Próximo mantenimiento">
-        <div class="flex flex-col items-center py-4 text-center">
-            <span class="grid h-11 w-11 place-items-center rounded-full bg-gray-100 text-gray-400">
-                <x-ui.icon name="calendar" class="h-6 w-6" />
-            </span>
-            <p class="mt-3 text-sm font-medium text-gray-900">Sin programación</p>
-            <p class="mt-1 text-xs text-gray-500">La programación de mantenimientos se habilita en la FASE 7.</p>
-        </div>
+        @if ($proxima)
+            @php $estadoProg = $proxima->estadoActual(); $diasProg = $proxima->diasParaProxima(); @endphp
+            <div class="space-y-2 text-sm">
+                <p class="text-2xl font-semibold text-gray-900">{{ $proxima->proxima_fecha->format('d/m/Y') }}</p>
+                <p class="text-gray-500">
+                    {{ $proxima->tipo->label() }} · {{ $proxima->frecuencia->label() }}
+                </p>
+                <div class="flex items-center gap-2">
+                    <x-ui.badge :color="$estadoProg->color()">{{ $estadoProg->label() }}</x-ui.badge>
+                    <span class="text-xs text-gray-400">
+                        {{ $diasProg < 0 ? abs($diasProg).' días de retraso' : ($diasProg === 0 ? 'hoy' : "en {$diasProg} días") }}
+                    </span>
+                </div>
+                @can('update', $proxima)
+                    <a href="{{ route('programaciones.edit', $proxima) }}"
+                       class="inline-block pt-1 text-xs font-medium text-brand-700 hover:underline">Editar programación</a>
+                @endcan
+            </div>
+        @else
+            <div class="flex flex-col items-center py-4 text-center">
+                <span class="grid h-11 w-11 place-items-center rounded-full bg-gray-100 text-gray-400">
+                    <x-ui.icon name="calendar" class="h-6 w-6" />
+                </span>
+                <p class="mt-3 text-sm font-medium text-gray-900">Sin programación</p>
+                <p class="mt-1 text-xs text-gray-500">Este equipo no tiene mantenimientos programados.</p>
+                @can('create', \App\Models\Programacion::class)
+                    <x-ui.button :href="route('equipos.programaciones.create', $equipo)" size="sm" class="mt-3">
+                        Programar mantenimiento
+                    </x-ui.button>
+                @endcan
+            </div>
+        @endif
     </x-ui.card>
 
     {{-- Historial --}}

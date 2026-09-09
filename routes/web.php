@@ -9,6 +9,7 @@ use App\Http\Controllers\Equipos\EquipoController;
 use App\Http\Controllers\Mantenimientos\EvidenciaController;
 use App\Http\Controllers\Mantenimientos\MantenimientoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Programaciones\ProgramacionController;
 use App\Http\Controllers\Usuarios\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,18 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->only(['index', 'show', 'edit', 'update', 'destroy']);
     Route::get('evidencias/{evidencia}', [EvidenciaController::class, 'show'])->name('evidencias.show');
     Route::delete('evidencias/{evidencia}', [EvidenciaController::class, 'destroy'])->name('evidencias.destroy');
+
+    // Programación de mantenimientos
+    Route::get('equipos/{equipo}/programaciones/create', [ProgramacionController::class, 'create'])
+        ->name('equipos.programaciones.create');
+    Route::post('equipos/{equipo}/programaciones', [ProgramacionController::class, 'store'])
+        ->name('equipos.programaciones.store');
+    Route::resource('programaciones', ProgramacionController::class)
+        ->parameters(['programaciones' => 'programacion'])
+        ->only(['index', 'edit', 'update', 'destroy']);
+    Route::patch('programaciones/{programacion}/realizar', [ProgramacionController::class, 'realizar'])->name('programaciones.realizar');
+    Route::patch('programaciones/{programacion}/cancelar', [ProgramacionController::class, 'cancelar'])->name('programaciones.cancelar');
+    Route::patch('programaciones/{programacion}/reactivar', [ProgramacionController::class, 'reactivar'])->name('programaciones.reactivar');
 
     // Catálogos
     Route::prefix('catalogos')->name('catalogos.')->group(function () {

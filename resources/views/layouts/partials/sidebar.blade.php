@@ -39,8 +39,11 @@
                     Mantenimientos
                 </x-ui.nav-link>
             @endcan
-            {{-- Este módulo se habilita en una fase posterior --}}
-            <x-ui.nav-link icon="calendar" disabled>Programación</x-ui.nav-link>
+            @can('programaciones.ver')
+                <x-ui.nav-link :href="route('programaciones.index')" :active="request()->routeIs('programaciones.*')" icon="calendar">
+                    Programación
+                </x-ui.nav-link>
+            @endcan
         </div>
 
         @can('catalogos.ver')

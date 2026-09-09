@@ -70,6 +70,11 @@ class Equipo extends Model
         return $this->hasMany(Mantenimiento::class);
     }
 
+    public function programaciones(): HasMany
+    {
+        return $this->hasMany(Programacion::class);
+    }
+
     public function scopeActivos(Builder $query): void
     {
         $query->where('activo', true);

@@ -70,6 +70,7 @@ class EquipoController extends Controller
             'ubicacion',
             'responsable',
             'mantenimientos' => fn ($q) => $q->recientes()->with('responsable'),
+            'programaciones',
         ]);
 
         return view('equipos.show', ['equipo' => $equipo]);
