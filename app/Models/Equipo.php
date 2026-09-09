@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\EstadoEquipo;
+use Carbon\CarbonInterface;
 use Database\Factories\EquipoFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -90,5 +91,24 @@ class Equipo extends Model
     public function getDescripcionAttribute(): string
     {
         return trim(($this->marca?->nombre ?? '').' '.($this->modelo ?? '')) ?: '—';
+    }
+
+    /**
+     * Estado de la garantía: true vigente, false vencida, null sin fecha registrada.
+     */
+    public function getGarantiaVigenteAttribute(): ?bool
+    {
+        return $this->fecha_garantia?->gte(today());
+    }
+
+    /**
+     * Antigüedad del equipo desde su adquisición, en texto (p. ej. "2 años 3 meses").
+     */
+    public function getAntiguedadAttribute(): ?string
+    {
+        return $this->fecha_adquisicion?->diffForHumans([
+            'parts' => 2,
+            'syntax' => CarbonInterface::DIFF_ABSOLUTE,
+        ]);
     }
 }
